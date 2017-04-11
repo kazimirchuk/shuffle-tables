@@ -49,7 +49,7 @@ function saveState(tableId, $inputs) {
 };
 
 function setProperties(tableData) {
-  $('.properties input').each(function(index, input) {
+  $('.object-properties input').each(function(index, input) {
     var $input = $(input);
     $input.removeAttr('disabled');
     $input.parent().find('button').removeAttr('disabled');
@@ -74,7 +74,7 @@ function saveActiveTable($table) {
   if ($activeTable.length &&
     'undefined' !== typeof $activeTable.attr('id') &&
     $activeTable.attr('id') !== $table.attr('id')) {
-    saveState($activeTable.attr('id'), $('.properties input'));
+    saveState($activeTable.attr('id'), $('.object-properties input'));
     $activeTable.removeClass('active');
   }
 };
@@ -89,7 +89,7 @@ function clickTable() {
     if ($activeTable.length &&
       'undefined' !== typeof $activeTable.attr('id') &&
       $activeTable.attr('id') !== $table.attr('id')) {
-      saveState($activeTable.attr('id'), $('.properties input'));
+      saveState($activeTable.attr('id'), $('.object-properties input'));
       $activeTable.removeClass('active');
     }
 
@@ -107,13 +107,13 @@ function clickAddTable() {
   if ($activeTable.length &&
     'undefined' !== typeof $activeTable.attr('id') &&
     $activeTable.attr('id') !== $table.attr('id')) {
-    saveState($activeTable.attr('id'), $('.properties input'));
+    saveState($activeTable.attr('id'), $('.object-properties input'));
     $activeTable.removeClass('active');
   }
 
   $table.addClass('active');
-  if ($('.properties').hasClass('disabled')) {
-    $('.properties').removeClass('disabled');
+  if ($('.object-properties').hasClass('disabled')) {
+    $('.object-properties').removeClass('disabled');
   }
   setProperties(tableData);
   $table.find('p').text(tableData.text);
@@ -122,14 +122,38 @@ function clickAddTable() {
 };
 
 function addPropertiesChangeHandler() {
-  $('.properties input').each(function(index, input) {
+  $('.object-properties input').each(function(index, input) {
     $(input).change(propertyChanged);
   });
 
-  $('.properties button').each(function(index, button) {
+  $('.object-properties button').each(function(index, button) {
     $(button).click(resetButtonClicked);
   });
+
+  $('.room-properties input').each(function(index, input) {
+    $(input).change(roomPropertyChanged);
+  });
+
+  $('.room-properties button').each(function(index, button) {
+    $(button).click(roomResetButtonClicked);
+  });
 };
+
+function roomResetButtonClicked() {
+  var $button = $(this);
+
+  switch($button.attr('id')) {
+    case 'reset-room-length':
+      $button.parent().find('input#room-length').val(DEFAULT_ROOM_PARAMS.length)
+        .change();
+      break;
+    case 'reset-room-width':
+      $button.parent().find('input#room-width')
+        .val(DEFAULT_ROOM_PARAMS.width).change();
+      break;
+    default: break;
+  }
+}
 
 function resetButtonClicked() {
   var $button = $(this);
@@ -145,6 +169,21 @@ function resetButtonClicked() {
     default: break;
   }
 }
+
+function roomPropertyChanged() {
+  var $input = $(this);
+  var $room = $('#editor');
+
+  switch ($input.attr('id')) {
+    case 'room-length':
+      $room.height($input.val());
+      break;
+    case 'room-width':
+      $room.width($input.val());
+      break;
+    default: break;
+  }
+};
 
 function propertyChanged() {
   var $input = $(this),
@@ -182,3 +221,8 @@ var DEFAULT_TABLE_PARAMS = {
   borderRadius: 3,
   marginTop: 7
 };
+
+var DEFAULT_ROOM_PARAMS = {
+  length: 600,
+  width: 700
+}

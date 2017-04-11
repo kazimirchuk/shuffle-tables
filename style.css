@@ -63,7 +63,7 @@ h2 {
 
 .editor {
   min-height: 600px;
-  width: 100%;
+  min-width: 700px;
   flex: 0 1 auto;
   border-style: solid;
   border-color: #EfE8E8;
@@ -71,15 +71,13 @@ h2 {
   background-color: #F9F9F9;
 }
 
-.properties {
-  min-height: 600px;
-  width: 70%;
+.object-properties {
   display: flex;
   flex-direction: column;
   flex-wrap: wrap;
 }
 
-.properties.disabled label, .properties.disabled input {
+.object-properties.disabled label, .object-properties.disabled input {
   color: grey;
 }
 
@@ -87,7 +85,8 @@ h2 {
   margin: 5%;
 }
 
-.properties>h5 {
+
+.object-properties>h5 {
   margin-left: 10%;
   margin-top: 5%;
 }
