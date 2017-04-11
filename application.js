@@ -52,6 +52,7 @@ function setProperties(tableData) {
   $('.properties input').each(function(index, input) {
     var $input = $(input);
     $input.removeAttr('disabled');
+    $input.parent().find('button').removeAttr('disabled');
 
     switch ($input.attr('id')) {
       case 'table-zoomer':
@@ -93,7 +94,6 @@ function clickTable() {
     }
 
     $table.addClass('active');
-    $('.properties').removeClass('disabled');
     setProperties(tableData);
     $table.find('p').text(tableData.text);
   }
@@ -125,7 +125,26 @@ function addPropertiesChangeHandler() {
   $('.properties input').each(function(index, input) {
     $(input).change(propertyChanged);
   });
+
+  $('.properties button').each(function(index, button) {
+    $(button).click(resetButtonClicked);
+  });
 };
+
+function resetButtonClicked() {
+  var $button = $(this);
+
+  switch($button.attr('id')) {
+    case 'reset-zoom':
+      $button.parent().find('input#table-zoomer').val(1).change();
+      break;
+    case 'reset-rotation':
+      $button.parent().find('input#table-rotator')
+        .val(DEFAULT_TABLE_PARAMS.rotation).change();
+      break;
+    default: break;
+  }
+}
 
 function propertyChanged() {
   var $input = $(this),
